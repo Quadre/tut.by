@@ -38,11 +38,18 @@ namespace Tests.Data
         /// Serialize & save data to filePath
         /// </summary>
         /// <param name="obj">object to be serialized</param>
-        /// <param name="filePath">Fulliy qualified file path where serialized data ill be stored</param>
+        /// <param name="filePath">Relative to DefaultConfigFolder path to config file</param>
         public void Save(T obj, string filePath)
         {
             try
             {
+                if (filePath.Length > 0)
+                    if (filePath[0] != '\\')
+                    {
+                        filePath = "\\" + filePath;
+                    }
+                filePath = DefaultConfigFolder + filePath;
+
                 XmlSerializer xml = new XmlSerializer(typeof(T));
                 var stream = File.Exists(filePath) ? new FileStream(filePath, FileMode.Truncate) : new FileStream(filePath, FileMode.Create);
                 xml.Serialize(stream, obj);
@@ -58,12 +65,19 @@ namespace Tests.Data
         /// <summary>
         /// De-Serialize previosly saved data from given filePath
         /// </summary>
-        /// <param name="filePath">Fulliy qualified file path</param>
+        /// <param name="filePath">Relative to DefaultConfigFolder path to config file</param>
         /// <returns></returns>
         public T Load(string filePath)
         {
             try
             {
+                if (filePath.Length > 0)
+                    if (filePath[0] != '\\')
+                    {
+                        filePath = "\\" + filePath;
+                    }
+                filePath = DefaultConfigFolder + filePath;
+
                 if (File.Exists(filePath))
                 {                    
                     XmlSerializer xml = new XmlSerializer(typeof(T));
