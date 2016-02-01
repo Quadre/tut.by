@@ -9,7 +9,8 @@ using OpenQA.Selenium;
 using Tests.Utils;
 
 namespace Tests.Pages.Elements
-{    
+{
+    [Name("General table for CurrencyRate widget")]
     [Block]
     class CurrencyRateWidgetTable : HtmlElement
     {
@@ -19,19 +20,22 @@ namespace Tests.Pages.Elements
         [FindsBy(How = How.XPath, Using = ".//tr/td[2]/span")]
         private IList<IWebElement> CurrencyRate;
 
-        public Dictionary<string, string> RateTable 
+
+        /// <summary>
+        /// Represent data in human-readeble format: Dictionary[Currency, Rate]
+        /// </summary>
+        /// <returns>Dictionary[Currency, Rate] pair</returns>
+        public Dictionary<string, string> ToDictionary  ()
         {
-            get
+            if (CurrencyName.Count != CurrencyRate.Count)
             {
-                if (CurrencyName.Count != CurrencyRate.Count)
-                {
-                    throw new IndexOutOfRangeException("CurrencyName.Count != CurrencyCourse.Count");
-                }
-                Dictionary<string, string> table = CurrencyName.ToDictionary(x => GetCurrencyFromUrlParameter(x.GetAttribute("href")), 
-                                                                             x => GetRateById(CurrencyName.IndexOf(x)));                
-                return table;
+                throw new IndexOutOfRangeException("CurrencyName.Count != CurrencyCourse.Count");
             }
+            Dictionary<string, string> table = CurrencyName.ToDictionary(x => GetCurrencyFromUrlParameter(x.GetAttribute("href")), 
+                                                                            x => GetRateById(CurrencyName.IndexOf(x)));                
+            return table;
         }
+        
 
         private string GetCurrencyFromUrlParameter (string href)
         {
@@ -40,8 +44,7 @@ namespace Tests.Pages.Elements
 
         private string GetRateById(int id)
         {            
-            string rate = CurrencyRate[id].GetAttribute("innerHTML");
-            // remove spaces            
+            string rate = CurrencyRate[id].GetAttribute("innerHTML");            
             return CurrencyUtils.NormalizeCurrencyRate(rate);
         }
     }

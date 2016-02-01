@@ -6,23 +6,26 @@ namespace Tests.Configuration
     [Serializable]
     public class GeneralConfig
     {
-        private static GeneralConfig instance;
-        
         #region Configuration entries
-        public string MainDomian { get; set; } // the 'tut.by' part from  http://www.tut.by/ that could be changed on different env    
-        // webDriver waiter interval
+        /// <summary>
+        /// The main dmain part ['tut.by']t from  http://www.tut.by/ that could be changed on different env    
+        /// </summary>
+        public string MainDomian { get; set; }
+
+        /// <summary>
+        /// WebDriver  Timeout in seconds, that should be used default
+        /// </summary>
         public int DefaultTimeoutSec { get; set; }  //sec
+
+        /// <summary>
+        /// WebDriver  Polling interval, in milliseconds that should be used default
+        /// </summary>
         public int DefaultPollingIntervalMs { get; set; }  // ms
-        // to do : add browsers ?    
+        
+        // to do : add multi-browsers support?  
         #endregion
-        public WeekendRateCheckData WeekendRateData;
 
-        static GeneralConfig()
-        {            
-            instance = new GeneralConfig();
-        }              
-
-        public static GeneralConfig Instance { get { return instance; }   set { instance = value; } }
+        public const string DEFAULT_FILE_NAME = "\\config.xml";
 
         public static GeneralConfig CreateDefault()
         {

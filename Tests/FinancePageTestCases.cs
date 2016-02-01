@@ -15,22 +15,22 @@ namespace Tests
         public void SetUp()
         {
             //base.SetUp();
-            financePage = new FinancePage(TestConfiguration.WebDriver);
-            financePage.NavigateToThisPage();
+            financePage = new FinancePage(TestSetup.WebDriver, TestSetup.Config);
+            financePage.Navigate();
         }
                
         private void PrepareCurrencyConvertor (string ccyFrom, string ccyTo)
         {
             financePage.ActualizePage();            
 
-            if (financePage.CurrencyConverter.CaluculatorBottom.InputCurrency!= ccyFrom)
+            if (financePage.CurrencyConverter.CaluculatorBottom.Currency!= ccyFrom)
             {
-                financePage.CurrencyConverter.CaluculatorBottom.InputCurrency = ccyFrom;
+                financePage.CurrencyConverter.CaluculatorBottom.Currency = ccyFrom;
             }
 
-            if (financePage.CurrencyConverter.CaluculatorTop.InputCurrency != ccyTo)
+            if (financePage.CurrencyConverter.CaluculatorTop.Currency != ccyTo)
             {
-                financePage.CurrencyConverter.CaluculatorTop.InputCurrency = ccyTo;
+                financePage.CurrencyConverter.CaluculatorTop.Currency = ccyTo;
             }
 
             financePage.CurrencyConverter.ClearInputs();
@@ -63,9 +63,9 @@ namespace Tests
             PrepareCurrencyConvertor(currencyFrom, currencyTo);
 
             // Set value in Bottom input
-            financePage.CurrencyConverter.CaluculatorBottom.InputValue = amount.ToString();
+            financePage.CurrencyConverter.CaluculatorBottom.Value = amount.ToString();
             // Get value, calculated by CurrencyConvertor
-            string strOutValActual = financePage.CurrencyConverter.CaluculatorTop.InputValue;
+            string strOutValActual = financePage.CurrencyConverter.CaluculatorTop.Value;
             double decOutValActual = 0;
             double.TryParse(CurrencyUtils.NormalizeCurrencyRate(strOutValActual), out decOutValActual);
 
@@ -78,7 +78,8 @@ namespace Tests
     
         }
 
-        // Add tc with incorrect input data
+
+        //Todo: Add tc with incorrect input data
         // !@#$%^&&*()__
         // asdas
         // -1  -- max (?)        

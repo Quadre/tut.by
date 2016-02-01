@@ -18,14 +18,15 @@ namespace Tests.Pages.Elements
         [Name("Currency select button")]
         [FindsBy(How = How.XPath, Using = ".//button")]
         private IWebElement cyrrencyButton;
-
-        // option data-subtext="Доллар США" value="20823" data-currency-name="USD"        
+        
         [Name("Calculator currency rate")]
         [FindsBy(How = How.XPath, Using = ".//option")]
         private IList<IWebElement> currencyRateList;
-        
 
-        public string InputValue
+        /// <summary>
+        /// Get\Set value of Amount field in currency convertor
+        /// </summary>
+        public string Value
         {
             get
             {
@@ -37,17 +38,26 @@ namespace Tests.Pages.Elements
             }
         }
 
+        /// <summary>
+        /// Clear value of Amount field in currency convertor
+        /// </summary>
         public void ClearInput()
         {
             input.Clear();
         }
 
+        /// <summary>
+        /// Activate Amount field in currency convertor, by emulating single click on it
+        /// </summary>
         public void SetActive()
         {
             input.Click();
         }
 
-        public string InputCurrency
+        /// <summary>
+        /// Get\Set value of currency field in currency convertor
+        /// </summary>
+        public string Currency
         {
             get
             {
@@ -62,26 +72,30 @@ namespace Tests.Pages.Elements
                     cyrrencyButton.Click();
                     currencyRef.Click();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
-                    throw new ArgumentException(string.Format("'{0}' currency not found in the dropdown list", value));
+                    throw new ArgumentException(string.Format("'{0}' currency not found in the dropdown list", value), ex);
                 }
             }
         }
 
+        /// <summary>
+        /// Get rate value for the selected currency from data currency convertor
+        /// </summary>
+        /// <param name="currency"></param>
+        /// <returns>Rate</returns>
         public string GetRate (string currency)
         {
             try
-            {
-                //option data-subtext="Доллар США" value="20823" data-currency-name="USD"     
+            {                
                 IWebElement currencyWebElement = FindElement(By.XPath(".//option[@data-currency-name='" + currency.ToUpper() + "']"));
                 return currencyWebElement.GetAttribute("value");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw new ArgumentException(string.Format("'{0}' rate not found in the dropdown list", currency.ToUpper())); ;
+                throw new ArgumentException(string.Format("'{0}' rate not found in the dropdown list", currency.ToUpper()), ex); ;
             }
         }
     }

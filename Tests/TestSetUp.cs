@@ -5,42 +5,44 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using Tests.Configuration;
+using Tests.Data;
 
 
 namespace Tests
 { 
     [SetUpFixture]
-    public class TestConfiguration
+    public class TestSetup
     {
         public static IWebDriver WebDriver { get; private set; }        
+        public static GeneralConfig Config { get; private set; }        
 
         [OneTimeSetUp]
         [Description("Configure tests activity")]
         public void SetUp()
         {           
-            ConfigHelperBase<GeneralConfig> cfgHelper = new ConfigHelperBase<GeneralConfig>();
+            DataPersister<GeneralConfig> cfgHelper = new DataPersister<GeneralConfig>();
                         
-            if (File.Exists(cfgHelper.DefaultConfigFullPath))
-            {                
-                GeneralConfig.Instance = cfgHelper.Load();
+            if (cfgHelper.FileExist(GeneralConfig.DEFAULT_FILE_NAME))
+            {
+                Config =  cfgHelper.Load(GeneralConfig.DEFAULT_FILE_NAME);
             }
             else
             {
-                GeneralConfig.Instance = GeneralConfig.CreateDefault();
-                cfgHelper.Save(GeneralConfig.Instance);
+                Config = GeneralConfig.CreateDefault();
+                cfgHelper.Save(Config, GeneralConfig.DEFAULT_FILE_NAME);
             }
             
-            // think about multiple instances
+            // think about muti-browser support
             WebDriver = new ChromeDriver();
+            
             // configure default timeouts
-            WebDriver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.FromSeconds(GeneralConfig.Instance.DefaultTimeoutSec));
+            WebDriver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.FromSeconds(Config.DefaultTimeoutSec));
         }
 
         [OneTimeTearDown]
         [Description("Tear down test activity")]
         public void TearDown()
-        {
-            GeneralConfig.Instance = null;
+        {            
             WebDriver.Quit();
         }
     }      

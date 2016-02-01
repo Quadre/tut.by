@@ -10,11 +10,11 @@ namespace Tests.Pages
         [FindsBy(How = How.XPath, Using = "//a[@class='topbar__link' and @title='Финансы']")]             
         public IWebElement LinkToFinanceOnTopMenu { get; set; }
 
-        public MainPage(IWebDriver webDriver) : base(webDriver) { }
+        public MainPage(IWebDriver webDriver, GeneralConfig cfg) : base(webDriver, cfg) { }
 
-        public override void NavigateToThisPage()
+        public override void Navigate()
         {
-            webDriver.Navigate().GoToUrl("http://www." + GeneralConfig.Instance.MainDomian);
+            webDriver.Navigate().GoToUrl("http://www." + cfg.MainDomian);
         }
 
         public void FinanceClick()
@@ -22,9 +22,9 @@ namespace Tests.Pages
             LinkToFinanceOnTopMenu.Click();
         }
 
-        public override bool isValidPage()
+        public override bool Verify()
         {
-            return webDriver.Url.Contains(GeneralConfig.Instance.MainDomian) &&  webDriver.Title.ToLower().Contains("tut.by");
+            return webDriver.Url.Contains(cfg.MainDomian) &&  webDriver.Title.ToLower().Contains("tut.by");
         }
     }
 }

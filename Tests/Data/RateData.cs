@@ -1,18 +1,19 @@
 ﻿using System;
 
-
 namespace Tests.Data
 {       
     [Serializable]
-    public class WeekendRateCheckData
+    public class RateData
     {
-        #region Configuration entries        
+        #region Configuration entries               
         public DateTime DateStamp { get; set; }        
         public string Rate { get; set; }                       
-        #endregion
+        #endregion        
 
-        public WeekendRateCheckData() { }              
-        public WeekendRateCheckData(DateTime dateStamp, string rate)
+        public const string DEFAULT_FILE_NAME = "\\WeekendRateCheckData.xml";
+
+        public RateData() { }              
+        public RateData(DateTime dateStamp, string rate)
         {
             DateStamp = dateStamp;
             Rate = rate;

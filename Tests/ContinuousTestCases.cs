@@ -11,24 +11,24 @@ namespace Tests
     public class ContinuousTestCases
     {        
         private FinancePage financePage;        
-        private WeekendRateCheckDataHelper dataHelper;
+        private DataPersister<RateData> dataHelper;
 
         [OneTimeSetUp]
         [Description("Sets up tests activity")]
         public void SetUp() 
         {            
-            dataHelper = new WeekendRateCheckDataHelper();
-            financePage = new FinancePage(TestConfiguration.WebDriver);
-            financePage.NavigateToThisPage();
+            dataHelper = new DataPersister<RateData>();
+            financePage = new FinancePage(TestSetup.WebDriver, TestSetup.Config);
+            financePage.Navigate();
         }       
     
-        /*
+        
         [Test]
         [Description("Check that rate didn't change on weekend (Friday - Saturday - Sunday), for BYR\\USD pair")]
         public void TC4_WeekendRateCheck()
         {            
             AnalizeRateByDate(DateTime.Now);
-        }*/
+        }
 
         [TestCase(2016, 01, 29)]
         [TestCase(2016, 01, 30)]
@@ -41,7 +41,7 @@ namespace Tests
         
         private void AnalizeRateByDate (DateTime todayDateStamp, string currency = "USD")
         {
-            WeekendRateCheckData storedData;
+            RateData storedData;
             string usdRateByCalc;
 
             switch (todayDateStamp.DayOfWeek)
@@ -54,13 +54,13 @@ namespace Tests
                     break;
                 case DayOfWeek.Friday:
                     financePage.ActualizePage();
-                    string usdRateByNBRB = CurrencyUtils.NormalizeCurrencyRate(financePage.CurrencyRate.RateByNBRB.RateTable[currency]);
+                    string usdRateByNBRB = CurrencyUtils.NormalizeCurrencyRate(financePage.CurrencyRate.RateByNBRB.ToDictionary()[currency]);
                     usdRateByCalc = financePage.CurrencyConverter.CaluculatorBottom.GetRate(currency);
 
-                    storedData = new WeekendRateCheckData();
+                    storedData = new RateData();
                     storedData.DateStamp = todayDateStamp;
                     storedData.Rate = usdRateByCalc;
-                    dataHelper.Save(storedData);
+                    dataHelper.Save(storedData, RateData.DEFAULT_FILE_NAME);
 
                     StringAssert.IsMatch(usdRateByNBRB, usdRateByCalc, currency + " rate by NBRB and CurrencyCalculator rate didn't match.");
                     break;
@@ -68,9 +68,9 @@ namespace Tests
                 case DayOfWeek.Sunday:
                     financePage.ActualizePage();
 
-                    Assert.IsTrue(File.Exists(dataHelper.DefaultConfigFullPath), "Precondition - failed. No previousle stored data.");
+                    Assert.IsTrue(dataHelper.FileExist(RateData.DEFAULT_FILE_NAME), "Precondition - failed. No previousle stored data.");
 
-                    storedData = dataHelper.Load();
+                    storedData = dataHelper.Load(RateData.DEFAULT_FILE_NAME);
                     usdRateByCalc = financePage.CurrencyConverter.CaluculatorBottom.GetRate(currency);
 
                     Assert.IsTrue(todayDateStamp.Subtract(storedData.DateStamp).TotalDays < 3,

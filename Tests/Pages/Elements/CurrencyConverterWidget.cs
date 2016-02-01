@@ -1,5 +1,4 @@
 ﻿using System;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using Yandex.HtmlElements.Elements;
 using Yandex.HtmlElements.Attributes;

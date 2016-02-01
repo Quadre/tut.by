@@ -14,8 +14,8 @@ namespace Tests
         [Description("Sets up  tests activity")]
         public void SetUp() 
         {
-            mainPage = new MainPage(TestConfiguration.WebDriver);
-            mainPage.NavigateToThisPage();
+            mainPage = new MainPage(TestSetup.WebDriver, TestSetup.Config);
+            mainPage.Navigate();
         }
         
         
@@ -24,7 +24,7 @@ namespace Tests
         public void TC1_MainPageAccesible()
         {
             mainPage.ActualizePage();
-            Assert.IsTrue(mainPage.isValidPage(), "Main page could not be validated.");
+            Assert.IsTrue(mainPage.Verify(), "Main page could not be validated.");
         }        
 
         [Test]
@@ -33,8 +33,8 @@ namespace Tests
         {                        
             mainPage.ActualizePage();
             mainPage.FinanceClick();
-            FinancePage financePage = new FinancePage(TestConfiguration.WebDriver);
-            Assert.IsTrue(financePage.isValidPage(), "Finance page could not be validated.");
+            FinancePage financePage = new FinancePage(TestSetup.WebDriver, TestSetup.Config);
+            Assert.IsTrue(financePage.Verify(), "Finance page could not be validated.");
         }                
     } 
 }

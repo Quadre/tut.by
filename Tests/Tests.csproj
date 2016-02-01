@@ -46,7 +46,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
     <Reference Include="WebDriver, Version=2.50.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -67,10 +66,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Configuration\Config.cs" />
-    <Compile Include="Configuration\ConfigHelperBase.cs" />
+    <Compile Include="Configuration\GeneralConfig.cs" />
+    <Compile Include="Data\DataPersister.cs" />
     <Compile Include="ContinuousTestCases.cs" />
-    <Compile Include="Data\WeekendRateCheckDataHelper.cs" />
     <Compile Include="Utils\CurrencyUtils.cs" />
     <Compile Include="Pages\Elements\CurrencyConverterWidgetElement.cs" />
     <Compile Include="Pages\Elements\CurrencyRateWidget.cs" />
@@ -82,29 +80,11 @@
     <Compile Include="FinancePageTestCases.cs" />
     <Compile Include="MainPageTestCases.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestConfiguration.cs" />
-    <Compile Include="Data\WeekendRateCheckData.cs" />
+    <Compile Include="TestSetup.cs" />
+    <Compile Include="Data\RateData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\packages\WebDriver.ChromeDriver.win32.2.20.0.0\content\chromedriver.exe">
-      <Link>chromedriver.exe</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Ext\HtmlElements-DotNet.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Ext\ImpromptuInterface.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MainApp\MainApp.csproj">
-      <Project>{07c6520f-7233-42de-b9c9-e411a0940fb4}</Project>
-      <Name>MainApp</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Choose>
